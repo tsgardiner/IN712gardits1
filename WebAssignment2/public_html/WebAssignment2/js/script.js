@@ -76,13 +76,29 @@ function EstimateTotal()
 //Also check attribute by id and adds the price of that ammount of bottles to the totalPrice.
 $(document).on("change", $('.order').find('input, select, textarea'), function () {
     var sum = 0; 
-    var currentSum = 0;
+    var price = 0;
+    
     $('.order').find('input, select, textarea').each(function () {
         sum += +$(this).val();
-        currentSum = $(this).val();
-        CalculateBottleCost($(this).attr('id'), currentSum);
+        
+        var id = $(this).attr('id');
+        var count = 0;
+        count = $(this).val();
+        
+        if (id === "txt-q-extra") {
+        price += +(count * 10);
+        }
+        if (id === "txt-q-cold") {
+        price += +(count * 8);
+        }
+        if (id  === "txt-q-garlic") {
+            price += +(count * 10);
+        }
+        if (id  === "txt-q-lemon") {
+            price += (count * 12);
+        }
     });    
-    
+    totalPrice = price;
     totalBottles = sum;
 });
 
@@ -93,37 +109,9 @@ function CalculateTotalShippingCost()
 }
 
 
-function CalculateBottleCost(id, sum)
+function CalculateBottleCost()
 {
-   
-    if (id === "txt-q-extra") {
-        var price = 0;
-        price += sum * 10;
-        totalPrice = totalPrice + price;
-        console.log(sum);
-        console.log(price);
-        }
-    if (id === "txt-q-cold") {
-        var price = 0;
-        price += sum * 8;
-        totalPrice = totalPrice + price;
-        console.log(sum);
-        console.log(price);        
-    }
-    if (id  === "txt-q-garlic") {
-        var price = 0;
-        price += sum * 10;
-        totalPrice = totalPrice + price;
-        console.log(sum);
-        console.log(price);
-    }
-    if (id  === "txt-q-lemon") {
-        var price = 0;
-        price += sum * 12;
-        totalPrice = totalPrice + price;
-        console.log(sum);
-        console.log(price);
-    }
+    
 }
 
 
