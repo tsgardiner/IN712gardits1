@@ -13,13 +13,15 @@ $(document).ready(function()
 
 //Globals
 var taxValue;
+var totalBottles;
 
 function OnButtonClick(event)
 {
     event.preventDefault();
     GetTaxJSONData();
+    
     var output = document.getElementById("results");
-    output.innerHTML = "<p>" + taxValue + "</p>";
+    output.innerHTML = "<p>" + totalBottles + "</p>";
     
 }
 
@@ -69,10 +71,15 @@ function EstimateTotal()
 }
 
 
-function CalculateTotalBottles()
-{
-    
-}
+
+$(document).on("change", $('.order').find('input, select, textarea'), function() {
+var sum = 0;
+$('.order').find('input, select, textarea').each(function(){
+    sum += +$(this).val();
+});
+totalBottles = sum;
+});
+
 
 
 function CalculateTotalShippingCost()
