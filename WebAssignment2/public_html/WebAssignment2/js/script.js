@@ -10,7 +10,6 @@ var shippingCostBottles;
 
 
 $(document).ready(function () {
-    
     var btnSubmit = document.getElementById("btn-estimate");
     btnSubmit.addEventListener("click", OnButtonClick);
 });
@@ -20,17 +19,18 @@ $(document).ready(function () {
 function OnButtonClick(event)
 {
     event.preventDefault();
-    GetTaxJSONData();
-    CheckEmail();
-    
-
+    Run();
 }
 
 
-function MethodCalls()
+function Run()
 {
-    //Not sure if needed but would conditionally call each function in the steps
-    //Acts like a main driver function
+    if (CheckState()) {
+        if (CheckEmail()) {
+            GetTaxJSONData();
+        }
+    }
+
 }
 
 
@@ -64,8 +64,22 @@ function GetTaxJSONData() {
 function CheckEmail()
 {
     var email = document.getElementById("email").value;
-    if (validateEmail(email)) {
+    if (!validateEmail(email)) {
+        alert("Please enter a valid email address.");
+        document.getElementById("email").focus();
+    } else {
+        return true;
+    }
+}
 
+function CheckState()
+{
+    var currentState = document.getElementById("s-state").value;
+    if (currentState === "") {
+        alert("Please select your state.");
+        document.getElementById("s-state").focus();
+    } else {
+        return true;
     }
 }
 
@@ -106,33 +120,30 @@ $(document).on("change", $('.order').find('input, select, textarea'), function (
 
 
 //On change of selected raido button add the correct shipping cost depeding on what is selected.
-$('input:radio[name=r_method]').change(function() {
-        if (this.value === 'pickup') {
-           shippingCost = 0;
-        }
-        else if (this.value === 'usps') {
-            shippingCost = 2;
-        }
-        else if (this.value === 'ups') {
-            shippingCost = 3;
-        }
-    });
-    
-    
+$('input:radio[name=r_method]').change(function () {
+    if (this.value === 'pickup') {
+        shippingCost = 0;
+    } else if (this.value === 'usps') {
+        shippingCost = 2;
+    } else if (this.value === 'ups') {
+        shippingCost = 3;
+    }
+});
+
+
 function CalculateTotalShippingCost()
 {
     if (shippingCost !== 0) {
         shippingCostBottles = (totalBottles * shippingCost);
-    }   else {
+    } else {
         shippingCostBottles = shippingCost;
-    }     
-    
+    }
 }
 
-function validateEmail(elementValue){        
-   var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;  
-   return emailPattern.test(elementValue);   
- }   
+function validateEmail(elementValue) {
+    var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailPattern.test(elementValue);
+}
 
 
 function Animation()
