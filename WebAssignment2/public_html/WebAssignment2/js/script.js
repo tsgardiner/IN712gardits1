@@ -1,11 +1,7 @@
 
 
 $(document).ready(function () {
-    //Jquery onload
-    //Not sure what onload stuff is needed yet
     var btnSubmit = document.getElementById("btn-estimate");
-
-
     btnSubmit.addEventListener("click", OnButtonClick);
 });
 
@@ -13,7 +9,8 @@ $(document).ready(function () {
 //Globals
 var taxValue;
 var totalBottles;
-var totalPrice = 0;
+var totalPrice;
+
 
 function OnButtonClick(event)
 {
@@ -21,9 +18,8 @@ function OnButtonClick(event)
     GetTaxJSONData();
 
     var output = document.getElementById("results");
-    var costDisplay = document.getElementById("txt-estimate");
-    costDisplay.output = '$' + totalPrice;
-    output.innerHTML = "<p>" + totalPrice + "</p>";
+    document.getElementById("txt-estimate").value = "$ " + (totalPrice * taxValue);
+    output.innerHTML = "<p>" + totalBottles + "</p>";
 
 }
 
@@ -42,7 +38,7 @@ function MethodCalls()
 function GetTaxJSONData() {
     var request = new XMLHttpRequest();
     request.onreadystatechange = function () {
-        if (request.readyState == 4 && request.status == 200) {
+        if (request.readyState === 4 && request.status === 200) {
             var states = JSON.parse(request.responseText);
             var currentState = document.getElementById("s-state").value;
             taxValue = states[currentState];
@@ -76,23 +72,21 @@ function EstimateTotal()
 //Also check attribute by id and adds the price of that ammount of bottles to the totalPrice.
 $(document).on("change", $('.order').find('input, select, textarea'), function () {
     var sum = 0; 
-    var price = 0;
-    
+    var price = 0;    
     $('.order').find('input, select, textarea').each(function () {
         sum += +$(this).val();
         
         var id = $(this).attr('id');
-        var count = 0;
-        count = $(this).val();
+        var count =  $(this).val();
         
         if (id === "txt-q-extra") {
-        price += +(count * 10);
+        price += (count * 10);
         }
         if (id === "txt-q-cold") {
-        price += +(count * 8);
+        price += (count * 8);
         }
         if (id  === "txt-q-garlic") {
-            price += +(count * 10);
+            price += (count * 10);
         }
         if (id  === "txt-q-lemon") {
             price += (count * 12);
