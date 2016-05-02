@@ -6,6 +6,10 @@ var totalBottles;
 var shippingCost = 0; //The default freight cost is $0
 var totalBottlePrice;
 var shippingCostBottles;
+var mainCanvas;
+var mainContext;
+var posX = 0;
+
 
 
 //Once the document has fully loaded creates an event listener for the form button.
@@ -27,21 +31,28 @@ function Run()
 {
     if (CheckState()) {
         if (CheckEmail()) {
-            GetTaxJSONData();
+            GetTaxJSONData();            
         }
     }
 }
 
+
 //Displays order information
 function Display(state) {    
     CalculateTotalShippingCost();
+    Draw();
+    
     var output = document.getElementById("results");
     var totalCost = (totalBottlePrice + (totalBottlePrice * taxValue) + shippingCostBottles);
-    output.innerHTML = "";
+    
+    output.innerHTML = "";  //Clear screen
+    
     document.getElementById("txt-estimate").value = "$ " + totalCost ;
     output.innerHTML += "<p> Total bottles: "+ totalBottles + "</p>";
     output.innerHTML += "<p> Total shipping: $" + shippingCostBottles + ".00</p>";
     output.innerHTML += "<p> Tax: " + (taxValue * 100) + ".00%  ("+ state + ") </p>";
+    
+    CreateLocalDetails(state);
 }
 
 
@@ -73,6 +84,7 @@ function CheckState()
         return true;
     }
 }
+
 
 //Checks and validated email. Returns true if correct.
 function CheckEmail()
@@ -132,6 +144,7 @@ $('input:radio[name=r_method]').change(function () {
     }
 });
 
+
 //Calculated the shipping cost per bottle if necessary.
 function CalculateTotalShippingCost()
 {
@@ -143,9 +156,33 @@ function CalculateTotalShippingCost()
 }
 
 
-
-
-function Animation()
-{
-
+//Draw and animate functions for the shipping image
+function Draw(){    
+    mainCanvas = document.getElementById("myCanvas");
+    mainContext = mainCanvas.getContext("2d");
+    setInterval(Animate, 10);    
 }
+function Animate(){   
+    
+    var img = new Image();
+    img.src = "images/packageShipment.png";
+    
+   if (posX <= 220){               
+        mainContext.clearRect(0,0, 200, 200);
+        mainContext.drawImage(img, posX, 0);
+        posX ++;            
+   } else {
+       posX = 0;
+   }          
+}
+
+//Create Json object in local storage.
+function CreateLocalDetails(currentState) {
+    var details = { purchaseDetails : [ 
+            { bottlesOrdered : totalBottles }, 
+            { state : currentState }]};
+    var json = JSON.stringify(details);
+    localStorage.setItem("purchaseDetails", json);
+}
+
+
