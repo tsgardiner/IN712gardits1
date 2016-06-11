@@ -6,7 +6,7 @@ class Book(models.Model):
     title = models.CharField(max_length=200, blank=True, default='')
     author = models.CharField(max_length=100)
     intro = models.TextField()
-    price = models.DecimalField()
+    price = models.DecimalField(decimal_places=2, max_digits=5)
     url = models.URLField()
 
     class Meta:
