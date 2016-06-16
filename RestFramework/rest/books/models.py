@@ -8,6 +8,7 @@ class Book(models.Model):
     intro = models.TextField()
     price = models.DecimalField(decimal_places=2, max_digits=5)
     url = models.URLField()
+    owner = models.ForeignKey('auth.User', related_name='books')
 
     class Meta:
         ordering = ('created',)
